@@ -5,16 +5,19 @@
 ############################################################
 
 	.globl	product
-product:	# TO DO: write this function
-	movq	$0, %rax		# z =0
+product:
+	pushq	%rbx	
+	movq	$0, %rax		
 .top:
-	cmpq	%rsi, $0		# compare y w 0
-	jge		end				# if y <= 0, exit loop
-	addq	%rdi, %rax		# else add x to z
-	subq	$1, %rsi		# subtract 1 from y
-	jmp		top			#unconditional jump, iterate again
+	movq	$0, %rbx
+	cmpq	%rsi, %rbx	
+	jge		end				
+	addq	%rdi, %rax		
+	subq	$1, %rsi		
+	jmp		top			
 .end:
-	popq	%rax 		#push answer to stack
+	popq	%rax 
+	popq	%rbx	
 	retq
 
 ############################################################
@@ -29,37 +32,8 @@ product:	# TO DO: write this function
 
 	.globl	power
 power:
-	pushq	%rbx	# callee saved, must save it before using it
-# pop x onto stack?
-	popq	%rdi
-	# if y ==1
-	compq	$1, %rsi
-	je		return
-	retq #this is wrong
 
-		# return x
-	#else
-	callq	product
-	
-	#move value of y into another reg
-	movq	%rsi, %rbx
-	#subtract 1 from the reg with value y copied into it
-	subq	$1, %rbx
-	callq	power	#w/ rdi, rbx
-
-	#push return address to stack then jump to product
-	retq
-	#pop return address from stack and jump back?
-	
-		#return product (x, power(x,y-1))
-	# end if
-.return:
-	popq	%rbx	#callee reg must restore it before function return
-	retq	
-#end function
-
-
-	xorq	%rax, %rax
+	xorq %rax, %rax
 	retq
 
 ############################################################
